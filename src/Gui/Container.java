@@ -13,7 +13,7 @@ import javax.swing.*;
 
 
 // mudar nome da classe rocket -> container
-public class Rocket extends JPanel implements ActionListener, KeyListener {
+public class Container extends JPanel implements ActionListener, KeyListener {
     //JPanel panel;
     BufferedImage imageBuffer;
     JLabel label;
@@ -23,7 +23,7 @@ public class Rocket extends JPanel implements ActionListener, KeyListener {
 
 
     // criar uma classe para as labels
-    public Rocket() {
+    public Container() {
         //this.new JPanel();
         this.setLayout(null);
         this.setBackground(Color.BLACK);
