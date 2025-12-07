@@ -11,8 +11,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 //import javax.swing.border.Border;
 
-
-// mudar nome da classe rocket -> container
 public class Container extends JPanel implements ActionListener, KeyListener {
     //JPanel panel;
     BufferedImage imageBuffer;
@@ -21,10 +19,7 @@ public class Container extends JPanel implements ActionListener, KeyListener {
     int x = 0, y = 0;
     boolean up, down, left, right;
 
-
-    // criar uma classe para as labels
     public Container() {
-        //this.new JPanel();
         this.setLayout(null);
         this.setBackground(Color.BLACK);
         try{
