@@ -11,8 +11,8 @@ import javax.swing.*;
 
 public class RocketLabel extends JLabel implements ActionListener, KeyListener {
     BufferedImage imageBuffer;
-    int x = 0, y = 0;
-    boolean up, down, left, right;
+    static int x = 0, y = 0;
+    boolean up, down, left, right, tab;
     Timer timer;
 
     public RocketLabel() {
@@ -41,6 +41,7 @@ public class RocketLabel extends JLabel implements ActionListener, KeyListener {
         if (down) y += 1;
         if (left) x -= 1;
         if (right) x += 1;
+        if (tab) System.out.println("X: " + x + "" + "Y:" + y);
 
         this.setLocation(x, y);
     }
@@ -52,6 +53,7 @@ public class RocketLabel extends JLabel implements ActionListener, KeyListener {
             case KeyEvent.VK_DOWN: down = true;break;
             case KeyEvent.VK_LEFT: left = true;break;
             case KeyEvent.VK_RIGHT: right = true;break;
+            case KeyEvent.VK_TAB: tab = true;break;
         }
     }
 
@@ -71,6 +73,9 @@ public class RocketLabel extends JLabel implements ActionListener, KeyListener {
             case KeyEvent.VK_RIGHT:
                 right = false;
                 break;
+            case KeyEvent.VK_TAB:
+                tab = false;
+                break;
         }
     }
 
@@ -79,4 +84,10 @@ public class RocketLabel extends JLabel implements ActionListener, KeyListener {
 
     }
 
+    public static int coordinateX() {
+        return x;
+    }
+    public static int coordinateY() {
+        return y;
+    }
 }

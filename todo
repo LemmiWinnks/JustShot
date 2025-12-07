@@ -5,3 +5,9 @@ pelo teclado.
 
 Por algum motivo os objetos alocados na memória não
 estão sendo encerrados corretamente. Preciso concertar isso.
+
+O problema com os objetos eram basicamente uma questão de threads que continuavam a rodar em segundo
+plano, pois a depender da do método utilizado para fechar o JFrame, os processos por baixo da janela
+continuam rodando. Nesse caso o Timer continuava processando mesmo após fechar a janela.
+
+Usando o JFrame.EXIT_ON_CLOSE, o problema acaba. Mas os demais como DISPOSE_ON_CLOSE, já não ocorre.
