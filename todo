@@ -1,1 +1,7 @@
-- Criar uma classe apenas para as labels
+Criar uma classe apenas para as labels.
+
+Criei a classe rocket, agora preciso mover as funcionalidades que me permite mover
+pelo teclado.
+
+Por algum motivo os objetos alocados na memória não
+estão sendo encerrados corretamente. Preciso concertar isso.
