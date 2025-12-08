@@ -1,5 +1,6 @@
 package Gui.Labels;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -10,20 +11,22 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class RocketLabel extends JLabel implements ActionListener, KeyListener {
+    private static RocketLabel instance;
     BufferedImage imageBuffer;
     static int x = 0, y = 0;
     boolean up, down, left, right, tab;
     Timer timer;
 
     public RocketLabel() {
-        try{
+        instance = this;
+        try {
             this.imageBuffer = ImageIO.read(new File("C:\\Users\\PICHAU\\Documents\\Projects\\JustShot\\JustShot\\src\\Elements\\rocketBlackWhiteResize2.png"));
             this.setIcon(new ImageIcon(imageBuffer));
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("Image not found");
         }
 
-        this.setBounds(x, y, 400, 600);
+        this.setBounds(143, 458, 80, 86);
 
         timer = new Timer(2, this);
         timer.start();
@@ -48,19 +51,29 @@ public class RocketLabel extends JLabel implements ActionListener, KeyListener {
 
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
-        switch(code) {
-            case KeyEvent.VK_UP: up = true;break;
-            case KeyEvent.VK_DOWN: down = true;break;
-            case KeyEvent.VK_LEFT: left = true;break;
-            case KeyEvent.VK_RIGHT: right = true;break;
-            case KeyEvent.VK_TAB: tab = true;break;
+        switch (code) {
+            case KeyEvent.VK_UP:
+                up = true;
+                break;
+            case KeyEvent.VK_DOWN:
+                down = true;
+                break;
+            case KeyEvent.VK_LEFT:
+                left = true;
+                break;
+            case KeyEvent.VK_RIGHT:
+                right = true;
+                break;
+            case KeyEvent.VK_TAB:
+                tab = true;
+                break;
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         int code = e.getKeyCode();
-        switch(code) {
+        switch (code) {
             case KeyEvent.VK_UP:
                 up = false;
                 break;
@@ -84,10 +97,8 @@ public class RocketLabel extends JLabel implements ActionListener, KeyListener {
 
     }
 
-    public static int coordinateX() {
-        return x;
+    public static RocketLabel getInstance() {
+        return instance;
     }
-    public static int coordinateY() {
-        return y;
-    }
+
 }

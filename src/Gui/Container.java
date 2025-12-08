@@ -14,20 +14,22 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 //import javax.swing.border.Border;
 
-public class Container extends JPanel implements ActionListener{
+public class Container extends JPanel implements ActionListener {
     RocketLabel rocketLabel = new RocketLabel();
     MonsterLabel monsterLabel;
     Timer timer;
     int x = 0;
+
     public Container() {
         this.setLayout(null);
         this.setBackground(Color.BLACK);
         this.setLayout(null);
         this.add(rocketLabel);
+        monsterLabel = new MonsterLabel();
+        this.add(monsterLabel);
 
         timer = new Timer(1000, this);
         timer.start();
-
     }
 
     @Override
