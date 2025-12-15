@@ -15,7 +15,8 @@ public class RocketLabel extends JLabel implements ActionListener, KeyListener {
     private static RocketLabel instance;
     BufferedImage imageBuffer;
     static int x = 0, y = 0;
-    boolean up, down, left, right, tab;
+    boolean up, down, left, right, tab, space;
+    public boolean z;
     Timer timer;
 
     public RocketLabel() {
@@ -34,6 +35,7 @@ public class RocketLabel extends JLabel implements ActionListener, KeyListener {
         addKeyListener(this);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
+        setFocusable(true);
     }
 
     @Override
@@ -45,9 +47,11 @@ public class RocketLabel extends JLabel implements ActionListener, KeyListener {
         if (down) y += 1;
         if (left) x -= 1;
         if (right) x += 1;
-        if (tab) System.out.println("X: " + x + "" + "Y:" + y);
+        if (tab) System.out.println("X: " + x + " " + "Y:" + y);
+
 
         this.setLocation(x, y);
+
     }
 
     public void keyPressed(KeyEvent e) {

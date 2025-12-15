@@ -1,4 +1,6 @@
-package Gui;
+package Gui.Window;
+
+import Gui.Panels.Container;
 
 import javax.swing.JFrame;
 

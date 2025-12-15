@@ -1,16 +1,14 @@
 package Gui.Labels;
 
-import Gui.Container;
-
 import javax.swing.*;
 import javax.imageio.ImageIO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 public class MonsterLabel extends JLabel implements ActionListener {
+    private static MonsterLabel instance;
     BufferedImage imageBuffer;
     ImageIcon imageicon;
     public int x = 0, y = 0;
@@ -19,6 +17,7 @@ public class MonsterLabel extends JLabel implements ActionListener {
 
 
     public MonsterLabel() {
+//        instance = this;
         try {
             this.imageBuffer = ImageIO.read(new File("C:\\Users\\PICHAU\\Documents\\Projects\\JustShot\\JustShot\\src\\Elements\\MonsterLabel2.png"));
         } catch (Exception e) {
@@ -28,7 +27,7 @@ public class MonsterLabel extends JLabel implements ActionListener {
         this.setIcon(imageicon);
         this.setBounds(155, 73, 40, 33);
 
-        timer = new Timer(30, this);
+        timer = new Timer(16, this);
         timer.start();
     }
 
@@ -49,6 +48,17 @@ public class MonsterLabel extends JLabel implements ActionListener {
             timer.stop();
             this.setIcon(null);
         }
+        if (this.getBounds().intersects(Shot.getInstance().getBounds())) {
+            timer.stop();
+            this.setIcon(null);
+        }
+    }
+
+    public static MonsterLabel getInstance() {
+        if (instance == null) {
+            instance = new MonsterLabel();
+        }
+        return instance;
     }
 
 }
