@@ -1,17 +1,2 @@
-Criar uma classe apenas para as labels.
-
-Criei a classe rocket, agora preciso mover as funcionalidades
- que me permite mover pelo teclado.
-
-Por algum motivo os objetos alocados na memória não
-estão sendo encerrados corretamente. Preciso concertar isso.
-
-O problema com os objetos eram basicamente uma questão de threads que continuavam a rodar em segundo
-plano, pois a depender da do método utilizado para fechar o JFrame, os processos por baixo da janela
-continuam rodando. Nesse caso o Timer continuava processando mesmo após fechar a janela.
-
-Usando o JFrame.EXIT_ON_CLOSE, o problema acaba.
-Mas os demais como DISPOSE_ON_CLOSE, já não ocorre.
-
-Consegui Criar o desenho do disparo.Será necessário criar um retângulo para ser o tiro do foguete,
-ele precisará sair da mesma posição do foguete. Possou utilizar a posição x do foguete para isso.
+(17.12.25)Creating a class for controlling the elements.
+(17.12.25)Need correction, moving implement "KeyListener" for JPanels, not JLabels.
