@@ -1,5 +1,6 @@
 package Gui.Labels;
 
+
 import javax.swing.*;
 import javax.imageio.ImageIO;
 import java.awt.event.ActionEvent;
@@ -8,16 +9,13 @@ import java.io.File;
 import java.awt.image.BufferedImage;
 
 public class MonsterLabel extends JLabel implements ActionListener {
-    private static MonsterLabel instance;
     BufferedImage imageBuffer;
     ImageIcon imageicon;
-    public int x = 0, y = 0;
-    double distance = 0;
+    public int x, y;
+    public RocketLabel rocket;
     Timer timer;
 
-
     public MonsterLabel() {
-//        instance = this;
         try {
             this.imageBuffer = ImageIO.read(new File("C:\\Users\\PICHAU\\Documents\\Projects\\JustShot\\JustShot\\src\\Elements\\MonsterLabel2.png"));
         } catch (Exception e) {
@@ -27,7 +25,7 @@ public class MonsterLabel extends JLabel implements ActionListener {
         this.setIcon(imageicon);
         this.setBounds(155, 73, 40, 33);
 
-        timer = new Timer(16, this);
+        timer = new Timer(30, this);
         timer.start();
     }
 
@@ -36,29 +34,17 @@ public class MonsterLabel extends JLabel implements ActionListener {
         this.x = this.getX();
         this.y = this.getY();
 
-        if (this.x < RocketLabel.x + 20) this.x += 3;
-        if (this.y > RocketLabel.y) this.y -= 3;
-        if (this.x > RocketLabel.x + 20) this.x -= 3;
-        if (this.y < RocketLabel.y) this.y += 3;
+        if (this.x < this.rocket.getX() + 20) this.x += 3;
+        if (this.y > this.rocket.getY()) this.y -= 3;
+        if (this.x > this.rocket.getX() + 20) this.x -= 3;
+        if (this.y < this.rocket.getY()) this.y += 3;
 
         this.setLocation(this.x, this.y);
 
-        if (this.getBounds().intersects(RocketLabel.getInstance().getBounds())) {
+        if (this.getBounds().intersects(rocket.getBounds())) {
             System.out.println("Game Over");
-            timer.stop();
             this.setIcon(null);
-        }
-        if (this.getBounds().intersects(Shot.getInstance().getBounds())) {
             timer.stop();
-            this.setIcon(null);
         }
     }
-
-    public static MonsterLabel getInstance() {
-        if (instance == null) {
-            instance = new MonsterLabel();
-        }
-        return instance;
-    }
-
 }

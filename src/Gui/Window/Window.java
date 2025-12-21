@@ -14,5 +14,6 @@ public class Window extends JFrame {
         this.setResizable(false);
         this.setVisible(true);
         this.add(container);
+        container.requestFocusInWindow();
     }
 }

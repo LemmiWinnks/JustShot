@@ -5,46 +5,101 @@ import Gui.Labels.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import javax.swing.*;
 
-public class Container extends JPanel implements ActionListener {
-    private static Container instance;
-    RocketLabel rocketLabel = new RocketLabel();
-    MonsterLabel monsterLabel;
-    MonsterLabel monsterLabel2;
-    MonsterLabel monsterLabel3;
-    public Shot shot;
-    Timer timer;
-    int x = 0;
+public class Container extends JPanel implements KeyListener, ActionListener {
+    private RocketLabel rocketLabel;
+    private MonsterLabel monsterLabel;
+    private Shot shot;
+    boolean up, down, left, right;
+    Timer rocketTimer;
+    Timer monsterTimer;
 
     public Container() {
         this.setLayout(null);
         this.setBackground(Color.BLACK);
         this.setLayout(null);
+
+        this.rocketLabel =  new RocketLabel();
         this.add(rocketLabel);
 
-        timer = new Timer(2000, this);
-        timer.start();
+        addKeyListener(this);
+        setFocusable(true);
+
+        rocketTimer = new Timer(1, this);
+        rocketTimer.setActionCommand("ROCKET");
+
+        monsterTimer = new Timer(800, this);
+        monsterTimer.setActionCommand("MONSTER");
+
+        rocketTimer.start();
+        monsterTimer.start();
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int code = e.getKeyCode();
+        switch(code) {
+            case KeyEvent.VK_UP:
+                up = true;
+                break;
+            case KeyEvent.VK_DOWN:
+                down = true;
+                break;
+            case KeyEvent.VK_LEFT:
+                left = true;
+                break;
+            case KeyEvent.VK_RIGHT:
+                right = true;
+                break;
+        }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        monsterLabel = new MonsterLabel();
-        this.add(monsterLabel);
-        shot = new Shot();
-        this.add(shot);
-        monsterLabel2 = new MonsterLabel();
-        monsterLabel2.setBounds(20, 30, 40, 33);
-        this.add(monsterLabel2);
-        monsterLabel3 = new MonsterLabel();
-        monsterLabel3.setBounds(300, 60, 40, 33);
-        this.add(monsterLabel3);
+        String command = e.getActionCommand();
+        switch(command) {
+            case "ROCKET" -> movingRocket();
+            case "MONSTER" -> addMonster();
+        }
     }
 
-    public static Container getInstance(){
-        if(instance == null){
-            instance = new Container();
+    public void movingRocket() {
+        if (up) rocketLabel.setLocation(rocketLabel.getX(), rocketLabel.getY() - 1);
+        if (down) rocketLabel.setLocation(rocketLabel.getX(), rocketLabel.getY() + 1);
+        if (left) rocketLabel.setLocation(rocketLabel.getX() - 1, rocketLabel.getY());
+        if (right) rocketLabel.setLocation(rocketLabel.getX() + 1, rocketLabel.getY());
+    }
+
+    public void addMonster() {
+        monsterLabel = new MonsterLabel();
+        monsterLabel.rocket = rocketLabel;
+        this.add(monsterLabel);
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        int code = e.getKeyCode();
+        switch(code) {
+            case KeyEvent.VK_UP:
+                up = false;
+                break;
+            case KeyEvent.VK_DOWN:
+                down = false;
+                break;
+            case KeyEvent.VK_LEFT:
+                left = false;
+                break;
+            case KeyEvent.VK_RIGHT:
+                right = false;
+                break;
         }
-        return instance;
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
     }
 }

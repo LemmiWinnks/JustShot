@@ -1,2 +1,3 @@
 (17.12.25)Creating a class for controlling the elements.
 (17.12.25)Need correction, moving implement "KeyListener" for JPanels, not JLabels.
+(21.12.25)Fix problem with "KeyListeners" in the labels, now, it just in the main panel.
