@@ -2,41 +2,47 @@ package Gui.Panels;
 
 import Gui.Labels.*;
 
-import java.awt.*;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.Timer;
 
-public class Container extends JPanel implements KeyListener, ActionListener {
-    private RocketLabel rocketLabel;
-    private MonsterLabel monsterLabel;
+public class ContainerPanel extends JPanel implements KeyListener, ActionListener {
+
+    // labels objects
+    private final RocketLabel rocketLabel;
     private Shot shot;
-    boolean up, down, left, right;
-    Timer rocketTimer;
-    Timer monsterTimer;
 
-    public Container() {
+    public ContainerPanel() {
         this.setLayout(null);
         this.setBackground(Color.BLACK);
         this.setLayout(null);
-
-        this.rocketLabel =  new RocketLabel();
-        this.add(rocketLabel);
-
         addKeyListener(this);
         setFocusable(true);
 
-        rocketTimer = new Timer(1, this);
+        // add labels
+        this.rocketLabel =  new RocketLabel();
+        this.add(rocketLabel);
+
+        Timer rocketTimer = new Timer(2, this);
         rocketTimer.setActionCommand("ROCKET");
 
-        monsterTimer = new Timer(800, this);
+        Timer monsterTimer = new Timer(800, this);
         monsterTimer.setActionCommand("MONSTER");
 
         rocketTimer.start();
         monsterTimer.start();
     }
+
+    // keys for controls(rocket at the moment)
+    private boolean
+            up,
+            down,
+            left,
+            right;
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -61,20 +67,20 @@ public class Container extends JPanel implements KeyListener, ActionListener {
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
         switch(command) {
-            case "ROCKET" -> movingRocket();
-            case "MONSTER" -> addMonster();
+            case "ROCKET" -> moveRocket();
+            case "MONSTER" -> spawnMonster();
         }
     }
 
-    public void movingRocket() {
+    public void moveRocket() {
         if (up) rocketLabel.setLocation(rocketLabel.getX(), rocketLabel.getY() - 1);
         if (down) rocketLabel.setLocation(rocketLabel.getX(), rocketLabel.getY() + 1);
         if (left) rocketLabel.setLocation(rocketLabel.getX() - 1, rocketLabel.getY());
         if (right) rocketLabel.setLocation(rocketLabel.getX() + 1, rocketLabel.getY());
     }
 
-    public void addMonster() {
-        monsterLabel = new MonsterLabel();
+    public void spawnMonster() {
+        MonsterLabel monsterLabel = new MonsterLabel();
         monsterLabel.rocket = rocketLabel;
         this.add(monsterLabel);
     }
@@ -99,7 +105,5 @@ public class Container extends JPanel implements KeyListener, ActionListener {
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
+    public void keyTyped(KeyEvent e) {}
 }
