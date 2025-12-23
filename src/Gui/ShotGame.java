@@ -1,9 +1,9 @@
 package Gui;
 
-import Gui.Window.WindowFrame;
+import Gui.Window.WindowsFrame;
 
 public class ShotGame {
    static void main() {
-       WindowFrame windowFrame = new WindowFrame();
+       new WindowsFrame();
     }
 }

@@ -10,13 +10,13 @@ import java.awt.event.KeyListener;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class ContainerPanel extends JPanel implements KeyListener, ActionListener {
+public class ComponentsPanel extends JPanel implements KeyListener, ActionListener {
 
     // labels objects
     private final RocketLabel rocketLabel;
     private Shot shot;
 
-    public ContainerPanel() {
+    public ComponentsPanel() {
         this.setLayout(null);
         this.setBackground(Color.BLACK);
         this.setLayout(null);
@@ -24,7 +24,7 @@ public class ContainerPanel extends JPanel implements KeyListener, ActionListene
         setFocusable(true);
 
         // add labels
-        this.rocketLabel =  new RocketLabel();
+        this.rocketLabel = new RocketLabel();
         this.add(rocketLabel);
 
         Timer rocketTimer = new Timer(2, this);
@@ -37,6 +37,15 @@ public class ContainerPanel extends JPanel implements KeyListener, ActionListene
         monsterTimer.start();
     }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String command = e.getActionCommand();
+        switch (command) {
+            case "ROCKET" -> moveRocket();
+            case "MONSTER" -> spawnMonster();
+        }
+    }
+
     // keys for controls(rocket at the moment)
     private boolean
             up,
@@ -47,7 +56,7 @@ public class ContainerPanel extends JPanel implements KeyListener, ActionListene
     @Override
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
-        switch(code) {
+        switch (code) {
             case KeyEvent.VK_UP:
                 up = true;
                 break;
@@ -64,11 +73,21 @@ public class ContainerPanel extends JPanel implements KeyListener, ActionListene
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        String command = e.getActionCommand();
-        switch(command) {
-            case "ROCKET" -> moveRocket();
-            case "MONSTER" -> spawnMonster();
+    public void keyReleased(KeyEvent e) {
+        int code = e.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                up = false;
+                break;
+            case KeyEvent.VK_DOWN:
+                down = false;
+                break;
+            case KeyEvent.VK_LEFT:
+                left = false;
+                break;
+            case KeyEvent.VK_RIGHT:
+                right = false;
+                break;
         }
     }
 
@@ -86,24 +105,6 @@ public class ContainerPanel extends JPanel implements KeyListener, ActionListene
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
-        int code = e.getKeyCode();
-        switch(code) {
-            case KeyEvent.VK_UP:
-                up = false;
-                break;
-            case KeyEvent.VK_DOWN:
-                down = false;
-                break;
-            case KeyEvent.VK_LEFT:
-                left = false;
-                break;
-            case KeyEvent.VK_RIGHT:
-                right = false;
-                break;
-        }
+    public void keyTyped(KeyEvent e) {
     }
-
-    @Override
-    public void keyTyped(KeyEvent e) {}
 }

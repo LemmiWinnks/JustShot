@@ -1,12 +1,12 @@
 package Gui.Window;
 
-import Gui.Panels.ContainerPanel;
+import Gui.Panels.ComponentsPanel;
 
 import javax.swing.JFrame;
 
-public class WindowFrame extends JFrame {
-    public WindowFrame() {
-        ContainerPanel containerPanel = new ContainerPanel();
+public class WindowsFrame extends JFrame {
+    public WindowsFrame() {
+        ComponentsPanel componentsPanel = new ComponentsPanel();
 
         this.setSize(400, 600);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -15,7 +15,7 @@ public class WindowFrame extends JFrame {
         this.setVisible(true);
 
         //add panels
-        containerPanel.requestFocusInWindow();
-        this.add(containerPanel);
+        this.add(componentsPanel);
+        componentsPanel.requestFocusInWindow();
     }
 }
