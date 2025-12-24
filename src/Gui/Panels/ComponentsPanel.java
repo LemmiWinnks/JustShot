@@ -14,7 +14,6 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
 
     // labels objects
     private final RocketLabel rocketLabel;
-    private Shot shot;
 
     public ComponentsPanel() {
         this.setLayout(null);
@@ -33,8 +32,12 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
         Timer monsterTimer = new Timer(800, this);
         monsterTimer.setActionCommand("MONSTER");
 
+//        Timer shootCommand = new Timer(10, this);
+//        shootCommand.setActionCommand("SHOOT");
+
         rocketTimer.start();
         monsterTimer.start();
+//        shootCommand.start();
     }
 
     @Override
@@ -43,6 +46,7 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
         switch (command) {
             case "ROCKET" -> moveRocket();
             case "MONSTER" -> spawnMonster();
+//            case "SHOOT" -> shootCommand();
         }
     }
 
@@ -51,7 +55,8 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
             up,
             down,
             left,
-            right;
+            right,
+            j;
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -68,6 +73,9 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
                 break;
             case KeyEvent.VK_RIGHT:
                 right = true;
+                break;
+            case KeyEvent.VK_J:
+                j = true;
                 break;
         }
     }
@@ -88,6 +96,9 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
             case KeyEvent.VK_RIGHT:
                 right = false;
                 break;
+            case KeyEvent.VK_J:
+                j = false;
+                break;
         }
     }
 
@@ -102,7 +113,25 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
         MonsterLabel monsterLabel = new MonsterLabel();
         monsterLabel.rocket = rocketLabel;
         this.add(monsterLabel);
+
+        if (j) {
+            Shot shot = new Shot();
+            shot.monster = monsterLabel;
+            shot.setBounds(rocketLabel.getX() + 20, rocketLabel.getY(), 20, 40);
+            this.add(shot);
+
+        }
+
     }
+
+//    public void shootCommand() {
+//        if (j) {
+//            Shot shot = new Shot();
+//            shot.setBounds(rocketLabel.getX(), rocketLabel.getY(), 20, 40);
+//            this.add(shot);
+//
+//        }
+//    }
 
     @Override
     public void keyTyped(KeyEvent e) {

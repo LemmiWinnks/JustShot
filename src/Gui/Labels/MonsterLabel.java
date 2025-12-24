@@ -36,11 +36,5 @@ public class MonsterLabel extends JLabel implements ActionListener {
         if (x > this.rocket.getX() + 20) x -= 3;
         if (y < this.rocket.getY()) y += 3;
         this.setLocation(x, y);
-
-        if (this.getBounds().intersects(rocket.getBounds())) {
-            System.out.println("Game Over");
-            this.setIcon(null);
-            timer.stop();
-        }
     }
 }

@@ -5,15 +5,16 @@ package Gui.Labels;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.awt.image.BufferedImage;
 
-public class Shot extends JLabel{
+public class Shot extends JLabel implements ActionListener {
     BufferedImage imageBuffer;
     ImageIcon imageicon;
-    int x, y; // need be in the same location of rocket
-    public boolean shot;
-
+    Timer timer;
     public Shot() {
         try {
             this.imageBuffer = ImageIO.read(new File("C:\\Users\\PICHAU\\Documents\\Projects\\JustShot\\JustShot\\src\\Elements\\projetil.png"));
@@ -23,6 +24,18 @@ public class Shot extends JLabel{
         imageicon = new ImageIcon(imageBuffer);
         this.setIcon(imageicon);
 
-        this.setBounds(x, y, 20, 40);
+        timer = new Timer(2, this);
+        timer.start();
+    }
+
+    public MonsterLabel monster;
+    public Rectangle rectangle = new Rectangle();
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        this.setLocation(this.getX(), this.getY() - 5);
+
+        if (this.getBounds().intersects(monster.getBounds())){
+            monster.setIcon(null);
+        }
     }
 }
