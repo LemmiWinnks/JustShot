@@ -14,7 +14,7 @@ import java.awt.image.BufferedImage;
 public class Shot extends JLabel implements ActionListener {
     BufferedImage imageBuffer;
     ImageIcon imageicon;
-    Timer timer;
+    public Timer timer;
     public Shot() {
         try {
             this.imageBuffer = ImageIO.read(new File("C:\\Users\\PICHAU\\Documents\\Projects\\JustShot\\JustShot\\src\\Elements\\projetil.png"));
@@ -28,14 +28,13 @@ public class Shot extends JLabel implements ActionListener {
         timer.start();
     }
 
-    public MonsterLabel monster;
     public Rectangle rectangle = new Rectangle();
     @Override
     public void actionPerformed(ActionEvent e) {
         this.setLocation(this.getX(), this.getY() - 5);
+    }
 
-        if (this.getBounds().intersects(monster.getBounds())){
-            monster.setIcon(null);
-        }
+    public void stop(){
+        timer.stop();
     }
 }

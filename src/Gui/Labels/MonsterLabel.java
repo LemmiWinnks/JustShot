@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 
 public class MonsterLabel extends JLabel implements ActionListener {
     private BufferedImage imageBuffer;
-    private final Timer timer;
+    public Timer timer;
 
     public MonsterLabel() {
         try {
@@ -37,4 +37,9 @@ public class MonsterLabel extends JLabel implements ActionListener {
         if (y < this.rocket.getY()) y += 3;
         this.setLocation(x, y);
     }
+
+    public void stop(){
+        timer.stop();
+    }
+
 }
