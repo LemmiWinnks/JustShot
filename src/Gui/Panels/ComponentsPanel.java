@@ -2,20 +2,25 @@ package Gui.Panels;
 
 import Gui.Labels.*;
 
-import java.awt.Color;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Random;
-import javax.swing.JPanel;
-import javax.swing.Timer;
+import javax.swing.*;
 
 public class ComponentsPanel extends JPanel implements KeyListener, ActionListener {
 
     private final RocketLabel rocketLabel;
-
+    JLabel counterPoints = new JLabel();
+    int points = 0;
+    JLabel gameOver;
+    Timer rocketTimer;
+    Timer monsterTimer;
+    Timer shootCommandTimer;
+    Timer checkColisionTimer;
     public ComponentsPanel() {
         this.setLayout(null);
         this.setBackground(Color.BLACK);
@@ -27,16 +32,24 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
         this.rocketLabel = new RocketLabel();
         this.add(rocketLabel);
 
-        Timer rocketTimer = new Timer(2, this);
+        gameOver = new JLabel();
+
+        counterPoints.setFont(new Font("Arial", Font.BOLD, 15));
+        counterPoints.setBounds(270, 10, 100, 40);
+        counterPoints.setText(String.format("POINTS: %d", points));
+        counterPoints.setForeground(Color.WHITE);
+        this.add(counterPoints);
+
+        rocketTimer = new Timer(2, this);
         rocketTimer.setActionCommand("ROCKET");
 
-        Timer monsterTimer = new Timer(300, this);
+        monsterTimer = new Timer(300, this);
         monsterTimer.setActionCommand("MONSTER");
 
-        Timer shootCommandTimer = new Timer(60, this);
+        shootCommandTimer = new Timer(60, this);
         shootCommandTimer.setActionCommand("SHOOT");
 
-        Timer checkColisionTimer = new Timer(1, this);
+        checkColisionTimer = new Timer(1, this);
         checkColisionTimer.setActionCommand("CHECKCOLISION");
 
         rocketTimer.start();
@@ -143,9 +156,9 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
     private final ArrayList<Shot> shotsPending = new ArrayList<>();
 
     public void checkCollision() {
-        for (MonsterLabel monster:this.monsters) {
-            for(Shot shot:shots) {
-                if(shot.getBounds().intersects(monster.getBounds())){
+        for (MonsterLabel monster : this.monsters) {
+            for (Shot shot : shots) {
+                if (shot.getBounds().intersects(monster.getBounds())) {
                     monster.stop();
                     this.remove(monster);
                     this.monsters.remove(monster);
@@ -154,18 +167,37 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
                     this.remove(shot);
                     this.shots.remove(shot);
 
-                    for(Shot shotsPending:shotsPending){
+                    for (Shot shotsPending : shotsPending) {
                         this.shots.remove(shotsPending);
                     }
+
+                    points += 1;
+                    counterPoints.setText(String.format("POINTS: %d", points));
+                    this.add(counterPoints);
+
                     repaint();
                     revalidate();
                     return;
                 }
-                if(shot.getY() < -this.getHeight()){
+                if (shot.getY() < -this.getHeight()) {
                     this.remove(shot);
                     shot.stop();
                     shotsPending.add(shot);
                 }
+            }
+            if(monster.getBounds().intersects(rocketLabel.getBounds())) {
+                gameOver.setFont(new Font("Arial", Font.BOLD, 40));
+                gameOver.setBounds(66, 0, 450, 450);
+                gameOver.setForeground(Color.WHITE);
+                gameOver.setText("GAME OVER");
+                this.add(gameOver);
+                rocketTimer.stop();
+                monsterTimer.stop();
+                shootCommandTimer.stop();
+                for(MonsterLabel stopMonster:monsters) {
+                    stopMonster.stop();
+                }
+                return;
             }
         }
     }
