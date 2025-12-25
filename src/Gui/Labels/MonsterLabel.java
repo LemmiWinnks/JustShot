@@ -19,9 +19,9 @@ public class MonsterLabel extends JLabel implements ActionListener {
         }
         ImageIcon imageicon = new ImageIcon(imageBuffer);
         this.setIcon(imageicon);
-        this.setBounds(155, 73, 40, 33);
 
-        timer = new Timer(30, this);
+
+        timer = new Timer(10, this);
         timer.start();
     }
 
@@ -30,11 +30,10 @@ public class MonsterLabel extends JLabel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         int x = this.getX();
         int y = this.getY();
-
-        if (x < this.rocket.getX() + 20) x += 3;
-        if (y > this.rocket.getY()) y -= 3;
-        if (x > this.rocket.getX() + 20) x -= 3;
-        if (y < this.rocket.getY()) y += 3;
+        if (x < this.rocket.getX() + 20) x += 1;
+        if (y > this.rocket.getY()) y -= 2;
+        if (x > this.rocket.getX() + 20) x -= 1;
+        if (y < this.rocket.getY()) y += 2;
         this.setLocation(x, y);
     }
 

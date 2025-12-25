@@ -8,15 +8,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Random;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 public class ComponentsPanel extends JPanel implements KeyListener, ActionListener {
 
-    private final ArrayList<MonsterLabel> monsters = new ArrayList<>();
-    private final ArrayList<Shot> shots = new ArrayList<>();
-
-    // labels objects
     private final RocketLabel rocketLabel;
 
     public ComponentsPanel() {
@@ -33,7 +30,7 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
         Timer rocketTimer = new Timer(2, this);
         rocketTimer.setActionCommand("ROCKET");
 
-        Timer monsterTimer = new Timer(800, this);
+        Timer monsterTimer = new Timer(300, this);
         monsterTimer.setActionCommand("MONSTER");
 
         Timer shootCommandTimer = new Timer(60, this);
@@ -55,7 +52,7 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
             case "ROCKET" -> moveRocket();
             case "MONSTER" -> spawnMonster();
             case "SHOOT" -> shootCommand();
-            case "CHECKCOLISION" -> checkColision();
+            case "CHECKCOLISION" -> checkCollision();
         }
     }
 
@@ -112,17 +109,24 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
     }
 
     public void moveRocket() {
-        if (up) rocketLabel.setLocation(rocketLabel.getX(), rocketLabel.getY() - 1);
-        if (down) rocketLabel.setLocation(rocketLabel.getX(), rocketLabel.getY() + 1);
-        if (left) rocketLabel.setLocation(rocketLabel.getX() - 1, rocketLabel.getY());
-        if (right) rocketLabel.setLocation(rocketLabel.getX() + 1, rocketLabel.getY());
+        if (up) rocketLabel.setLocation(rocketLabel.getX(), rocketLabel.getY() - 2);
+        if (down) rocketLabel.setLocation(rocketLabel.getX(), rocketLabel.getY() + 2);
+        if (left) rocketLabel.setLocation(rocketLabel.getX() - 2, rocketLabel.getY());
+        if (right) rocketLabel.setLocation(rocketLabel.getX() + 2, rocketLabel.getY());
     }
 
     public void spawnMonster() {
+        Random random = new Random();
+        int x = random.nextInt(-200, 500);
+        int y = random.nextInt(10, 90);
+
         MonsterLabel monsterLabel = new MonsterLabel();
         monsterLabel.rocket = rocketLabel;
+        monsterLabel.setBounds(x, -y, 40, 33);
+
         this.monsters.add(monsterLabel);
         this.add(monsterLabel);
+
     }
 
     public void shootCommand() {
@@ -134,27 +138,33 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
         }
     }
 
-    public void checkColision() {
+    private final ArrayList<MonsterLabel> monsters = new ArrayList<>();
+    private final ArrayList<Shot> shots = new ArrayList<>();
+    private final ArrayList<Shot> shotsPending = new ArrayList<>();
+
+    public void checkCollision() {
         for (MonsterLabel monster:this.monsters) {
             for(Shot shot:shots) {
                 if(shot.getBounds().intersects(monster.getBounds())){
-                    monster.timer.stop();
+                    monster.stop();
                     this.remove(monster);
                     this.monsters.remove(monster);
 
-                    shot.timer.stop();
+                    shot.stop();
                     this.remove(shot);
                     this.shots.remove(shot);
 
+                    for(Shot shotsPending:shotsPending){
+                        this.shots.remove(shotsPending);
+                    }
                     repaint();
                     revalidate();
                     return;
                 }
-                if (shot.getY() > this.getHeight()) {
-                    shot.timer.stop();
+                if(shot.getY() < -this.getHeight()){
                     this.remove(shot);
-                    this.shots.remove(shot);
-                    System.out.println("teste");
+                    shot.stop();
+                    shotsPending.add(shot);
                 }
             }
         }
