@@ -130,11 +130,12 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
         }
     }
 
+    int velocity = 2;
     public void moveRocket() {
-        if (up) rocketLabel.setLocation(rocketLabel.getX(), rocketLabel.getY() - 2);
-        if (down) rocketLabel.setLocation(rocketLabel.getX(), rocketLabel.getY() + 2);
-        if (left) rocketLabel.setLocation(rocketLabel.getX() - 2, rocketLabel.getY());
-        if (right) rocketLabel.setLocation(rocketLabel.getX() + 2, rocketLabel.getY());
+        if (up) rocketLabel.setLocation(rocketLabel.getX(), rocketLabel.getY() - velocity);
+        if (down) rocketLabel.setLocation(rocketLabel.getX(), rocketLabel.getY() + velocity);
+        if (left) rocketLabel.setLocation(rocketLabel.getX() - velocity, rocketLabel.getY());
+        if (right) rocketLabel.setLocation(rocketLabel.getX() + velocity, rocketLabel.getY());
     }
 
     public void spawnMonster() {
@@ -143,22 +144,27 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
         int y = random.nextInt(10, 90);
 
         MonsterLabel monsterLabel = new MonsterLabel();
-        if (points == 50) {
-            monsterLabel.timer.setDelay(monsterLabel.timer.getDelay()-5);
-            monsterTimer.setDelay(monsterTimer.getDelay()-1);
-        } else if(points == 100) {
-            monsterLabel.timer.setDelay(monsterLabel.timer.getDelay()-5);
-            monsterTimer.setDelay(monsterTimer.getDelay()-1);
-        } else if(points == 150) {
-            monsterLabel.timer.setDelay(monsterLabel.timer.getDelay()-5);
-            monsterTimer.setDelay(monsterTimer.getDelay()-1);
-        } else if(points == 200) {
-            monsterLabel.timer.setDelay(monsterLabel.timer.getDelay()-5);
-            monsterTimer.setDelay(monsterTimer.getDelay()-1);
-        } else if(points == 250) {
-        monsterLabel.timer.setDelay(monsterLabel.timer.getDelay()-5);
-        monsterTimer.setDelay(monsterTimer.getDelay()-1);
-    }
+        if (points >= 50) {
+            monsterLabel.timer.setDelay(monsterLabel.timer.getDelay() - 2);
+            monsterTimer.setDelay(monsterTimer.getDelay() - 1);
+            velocity += 0.5;
+        } else if (points >= 100) {
+            monsterLabel.timer.setDelay(monsterLabel.timer.getDelay() - 2);
+            monsterTimer.setDelay(monsterTimer.getDelay() - 1);
+            velocity += 0.5;
+        } else if (points >= 150) {
+            monsterLabel.timer.setDelay(monsterLabel.timer.getDelay() - 2);
+            monsterTimer.setDelay(monsterTimer.getDelay() - 1);
+            velocity += 0.5;
+        } else if (points >= 200) {
+            monsterLabel.timer.setDelay(monsterLabel.timer.getDelay() - 2);
+            monsterTimer.setDelay(monsterTimer.getDelay() - 1);
+            velocity += 0.5;
+        } else if (points >= 250) {
+            monsterLabel.timer.setDelay(monsterLabel.timer.getDelay() - 2);
+            monsterTimer.setDelay(monsterTimer.getDelay() - 1);
+            velocity += 0.5;
+        }
         monsterLabel.rocket = rocketLabel;
         monsterLabel.setBounds(x, -y, 40, 33);
 
@@ -169,7 +175,7 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
     public void shootCommand() {
         if (j) {
             Shot shot = new Shot();
-            shot.setBounds(rocketLabel.getX() + 20, rocketLabel.getY(), 20, 40);
+            shot.setBounds(rocketLabel.getX() + 30, rocketLabel.getY(), 20, 40);
             this.shots.add(shot);
             this.add(shot);
         }
@@ -185,6 +191,7 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
         for (MonsterLabel monster : this.monsters) {
             for (Shot shot : shots) {
                 if (shot.getBounds().intersects(monster.getBounds())) {
+
                     monster.stop();
                     this.remove(monster);
                     this.monsters.remove(monster);
@@ -193,10 +200,6 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
                     this.remove(shot);
                     this.shots.remove(shot);
 
-                    for (Shot shotsPending : shotsPending) {
-                        this.shots.remove(shotsPending);
-                    }
-
                     points += 1;
                     counterPoints.setText(String.format("POINTS: %d", points));
                     this.add(counterPoints);
@@ -204,12 +207,17 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
                     repaint();
                     revalidate();
                     return;
+                } else {
+                    if (shot.getY() < -(this.getHeight() - 600)) {
+                        this.remove(shot);
+                        shot.stop();
+                        shotsPending.add(shot);
+                    }
+
                 }
-                if (shot.getY() < -this.getHeight()) {
-                    this.remove(shot);
-                    shot.stop();
-                    shotsPending.add(shot);
-                }
+            }
+            for(Shot removeThisShot:shotsPending) {
+                shots.remove(removeThisShot);
             }
 
             // game over
@@ -245,7 +253,7 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
 
         monsters.clear();
         shots.clear();
-        shotsPending.clear();
+//        shotsPending.clear();
     }
 
     @Override
