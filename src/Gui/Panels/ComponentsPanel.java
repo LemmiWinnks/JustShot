@@ -23,6 +23,7 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
     private final Runnable restartGame;
     private final JLabel counterPoints;
     private int points = 0;
+
     public ComponentsPanel(Runnable restartGame) {
         this.restartGame = restartGame;
         this.setLayout(null);
@@ -56,7 +57,7 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
         monsterTimer = new Timer(300, this);
         monsterTimer.setActionCommand("MONSTER");
 
-        shootCommandTimer = new Timer(100, this);
+        shootCommandTimer = new Timer(170, this);
         shootCommandTimer.setActionCommand("SHOOT");
 
         checkColisionTimer = new Timer(1, this);
@@ -142,6 +143,22 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
         int y = random.nextInt(10, 90);
 
         MonsterLabel monsterLabel = new MonsterLabel();
+        if (points == 50) {
+            monsterLabel.timer.setDelay(monsterLabel.timer.getDelay()-5);
+            monsterTimer.setDelay(monsterTimer.getDelay()-1);
+        } else if(points == 100) {
+            monsterLabel.timer.setDelay(monsterLabel.timer.getDelay()-5);
+            monsterTimer.setDelay(monsterTimer.getDelay()-1);
+        } else if(points == 150) {
+            monsterLabel.timer.setDelay(monsterLabel.timer.getDelay()-5);
+            monsterTimer.setDelay(monsterTimer.getDelay()-1);
+        } else if(points == 200) {
+            monsterLabel.timer.setDelay(monsterLabel.timer.getDelay()-5);
+            monsterTimer.setDelay(monsterTimer.getDelay()-1);
+        } else if(points == 250) {
+        monsterLabel.timer.setDelay(monsterLabel.timer.getDelay()-5);
+        monsterTimer.setDelay(monsterTimer.getDelay()-1);
+    }
         monsterLabel.rocket = rocketLabel;
         monsterLabel.setBounds(x, -y, 40, 33);
 
