@@ -138,35 +138,56 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
         if (right) rocketLabel.setLocation(rocketLabel.getX() + velocity, rocketLabel.getY());
     }
 
+    int registerDelayMonster = 10;
+    int monsterVx = 1;
+    int monsterVy = 2;
     public void spawnMonster() {
+
         Random random = new Random();
-        int x = random.nextInt(-200, 500);
-        int y = random.nextInt(10, 90);
+        int x = random.nextInt(-150, 500);
+        int y = random.nextInt(1, 5);
 
         MonsterLabel monsterLabel = new MonsterLabel();
-        if (points >= 50) {
-            monsterLabel.timer.setDelay(monsterLabel.timer.getDelay() - 2);
-            monsterTimer.setDelay(monsterTimer.getDelay() - 1);
-            velocity += 0.5;
-        } else if (points >= 100) {
-            monsterLabel.timer.setDelay(monsterLabel.timer.getDelay() - 2);
-            monsterTimer.setDelay(monsterTimer.getDelay() - 1);
-            velocity += 0.5;
-        } else if (points >= 150) {
-            monsterLabel.timer.setDelay(monsterLabel.timer.getDelay() - 2);
-            monsterTimer.setDelay(monsterTimer.getDelay() - 1);
-            velocity += 0.5;
-        } else if (points >= 200) {
-            monsterLabel.timer.setDelay(monsterLabel.timer.getDelay() - 2);
-            monsterTimer.setDelay(monsterTimer.getDelay() - 1);
-            velocity += 0.5;
-        } else if (points >= 250) {
-            monsterLabel.timer.setDelay(monsterLabel.timer.getDelay() - 2);
-            monsterTimer.setDelay(monsterTimer.getDelay() - 1);
-            velocity += 0.5;
-        }
         monsterLabel.rocket = rocketLabel;
+        monsterLabel.timer.setDelay(registerDelayMonster);
+        monsterLabel.vx = monsterVx;
+        monsterLabel.vy = monsterVy;
         monsterLabel.setBounds(x, -y, 40, 33);
+
+        if (points == 50) {
+            registerDelayMonster = monsterLabel.timer.getDelay();
+            registerDelayMonster -= 1;
+
+            monsterVx = monsterLabel.vx;
+            monsterVy = monsterLabel.vy;
+            monsterVx += 0.5;
+            monsterVy += 0.5;
+
+            velocity += 0.5;
+            System.out.printf("delayMonster: %d, velocity: %d", registerDelayMonster, velocity);
+        } else if (points == 100) {
+            registerDelayMonster = monsterLabel.timer.getDelay();
+            registerDelayMonster -= 3;
+
+            monsterVx = monsterLabel.vx;
+            monsterVy = monsterLabel.vy;
+            monsterVx += 0.6;
+            monsterVy += 0.6;
+
+            velocity += 0.5;
+            System.out.printf("delayMonster: %d, velocity: %d", registerDelayMonster, velocity);
+        } else if (points == 150) {
+            registerDelayMonster = monsterLabel.timer.getDelay();
+            registerDelayMonster -= 3;
+
+            monsterVx = monsterLabel.vx;
+            monsterVy = monsterLabel.vy;
+            monsterVx += 0.7;
+            monsterVy += 0.7;
+
+            velocity += 0.8;
+            System.out.printf("delayMonster: %d, velocity: %d", registerDelayMonster, velocity);
+        }
 
         this.monsters.add(monsterLabel);
         this.add(monsterLabel);
@@ -216,7 +237,7 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
 
                 }
             }
-            for(Shot removeThisShot:shotsPending) {
+            for (Shot removeThisShot : shotsPending) {
                 shots.remove(removeThisShot);
             }
 

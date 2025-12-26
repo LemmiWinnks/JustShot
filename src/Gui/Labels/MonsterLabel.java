@@ -26,14 +26,15 @@ public class MonsterLabel extends JLabel implements ActionListener {
     }
 
     public RocketLabel rocket;
+    public int vx = 1, vy = 2;
     @Override
     public void actionPerformed(ActionEvent e) {
         int x = this.getX();
         int y = this.getY();
-        if (x < this.rocket.getX() + 20) x += 1;
-        if (y > this.rocket.getY()) y -= 2;
-        if (x > this.rocket.getX() + 20) x -= 1;
-        if (y < this.rocket.getY()) y += 2;
+        if (x < this.rocket.getX() + 20) x += vx;
+        if (y > this.rocket.getY()) y -= vy;
+        if (x > this.rocket.getX() + 20) x -= vx;
+        if (y < this.rocket.getY()) y += vy;
         this.setLocation(x, y);
     }
 
