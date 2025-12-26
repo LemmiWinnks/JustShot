@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="JustShot:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/JustShot_jar</output-path>
+    <root id="archive" name="JustShot.jar">
+      <element id="module-output" name="JustShot" />
+    </root>
+  </artifact>
+</component>
