@@ -13,15 +13,18 @@ import javax.swing.*;
 
 public class ComponentsPanel extends JPanel implements KeyListener, ActionListener {
 
+    private final JLabel gameOver;
+    private final Timer rocketTimer;
+    private final Timer monsterTimer;
+    private final Timer shootCommandTimer;
+    private final Timer checkColisionTimer;
+
     private final RocketLabel rocketLabel;
-    JLabel counterPoints = new JLabel();
-    int points = 0;
-    JLabel gameOver;
-    Timer rocketTimer;
-    Timer monsterTimer;
-    Timer shootCommandTimer;
-    Timer checkColisionTimer;
-    public ComponentsPanel() {
+    private final Runnable restartGame;
+    private final JLabel counterPoints;
+    private int points = 0;
+    public ComponentsPanel(Runnable restartGame) {
+        this.restartGame = restartGame;
         this.setLayout(null);
         this.setBackground(Color.BLACK);
         this.setLayout(null);
@@ -33,7 +36,14 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
         this.add(rocketLabel);
 
         gameOver = new JLabel();
+        gameOver.setFont(new Font("Arial", Font.BOLD, 40));
+        gameOver.setBounds(66, 0, 450, 450);
+        gameOver.setForeground(Color.WHITE);
+        gameOver.setText("GAME OVER");
+        this.add(gameOver);
+        gameOver.setVisible(false);
 
+        counterPoints = new JLabel();
         counterPoints.setFont(new Font("Arial", Font.BOLD, 15));
         counterPoints.setBounds(270, 10, 100, 40);
         counterPoints.setText(String.format("POINTS: %d", points));
@@ -46,7 +56,7 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
         monsterTimer = new Timer(300, this);
         monsterTimer.setActionCommand("MONSTER");
 
-        shootCommandTimer = new Timer(60, this);
+        shootCommandTimer = new Timer(100, this);
         shootCommandTimer.setActionCommand("SHOOT");
 
         checkColisionTimer = new Timer(1, this);
@@ -70,12 +80,7 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
     }
 
     // keys for controls(rocket at the moment)
-    private boolean
-            up,
-            down,
-            left,
-            right,
-            j;
+    private boolean up, down, left, right, j, z;
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -96,6 +101,9 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
             case KeyEvent.VK_J:
                 j = true;
                 break;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_Z) {
+            restartGame.run();
         }
     }
 
@@ -139,7 +147,6 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
 
         this.monsters.add(monsterLabel);
         this.add(monsterLabel);
-
     }
 
     public void shootCommand() {
@@ -153,9 +160,11 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
 
     private final ArrayList<MonsterLabel> monsters = new ArrayList<>();
     private final ArrayList<Shot> shots = new ArrayList<>();
+    // shots that dont collision no one object
     private final ArrayList<Shot> shotsPending = new ArrayList<>();
 
     public void checkCollision() {
+        // verify collision
         for (MonsterLabel monster : this.monsters) {
             for (Shot shot : shots) {
                 if (shot.getBounds().intersects(monster.getBounds())) {
@@ -185,21 +194,41 @@ public class ComponentsPanel extends JPanel implements KeyListener, ActionListen
                     shotsPending.add(shot);
                 }
             }
-            if(monster.getBounds().intersects(rocketLabel.getBounds())) {
-                gameOver.setFont(new Font("Arial", Font.BOLD, 40));
-                gameOver.setBounds(66, 0, 450, 450);
-                gameOver.setForeground(Color.WHITE);
-                gameOver.setText("GAME OVER");
-                this.add(gameOver);
+
+            // game over
+            if (monster.getBounds().intersects(rocketLabel.getBounds())) {
+                gameOver.setVisible(true);
+
                 rocketTimer.stop();
                 monsterTimer.stop();
-                shootCommandTimer.stop();
-                for(MonsterLabel stopMonster:monsters) {
+                for (MonsterLabel stopMonster : monsters) {
                     stopMonster.stop();
                 }
+                shootCommandTimer.stop();
+
                 return;
             }
         }
+    }
+
+    public void dispose() {
+        rocketTimer.stop();
+        monsterTimer.stop();
+        shootCommandTimer.stop();
+        checkColisionTimer.stop();
+
+        removeKeyListener(this);
+
+        for (MonsterLabel monster : monsters) {
+            monster.stop();
+        }
+        for (Shot shot : shots) {
+            shot.stop();
+        }
+
+        monsters.clear();
+        shots.clear();
+        shotsPending.clear();
     }
 
     @Override
